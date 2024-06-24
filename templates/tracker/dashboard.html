@@ -1,0 +1,20 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+<h2>Dashboard</h2>
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Type</th>
+    </tr>
+    {% for entry in entries %}
+    <tr>
+        <td>{{ entry.date }}</td>
+        <td>{{ entry.description }}</td>
+        <td>{{ entry.amount }}</td>
+        <td>{{ entry.is_expense|yesno:"Expense,Income" }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
