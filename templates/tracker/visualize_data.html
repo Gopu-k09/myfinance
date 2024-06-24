@@ -1,0 +1,15 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">Data Visualization</div>
+            <div class="card-body">
+                <div id="plotly-chart">
+                    {{ plot_div|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

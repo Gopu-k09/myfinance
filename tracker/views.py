@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+import plotly.graph_objs as go
 from .models import Entry
 from .forms import EntryForm, UserRegistrationForm
 
@@ -57,3 +58,36 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('login')
+
+def visualize_data(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    entries = Entry.objects.filter(user=request.user)
+    
+    # Prepare data for visualization
+    dates = [entry.date for entry in entries]
+    amounts = [entry.amount for entry in entries]
+    categories = ['Expense' if entry.is_expense else 'Income' for entry in entries]
+
+    # Create a bar chart using Plotly
+    trace = go.Bar(
+        x=dates,
+        y=amounts,
+        marker=dict(color=['red' if cat == 'Expense' else 'green' for cat in categories]),
+        name='Expenses vs Income'
+    )
+
+    layout = go.Layout(
+        title='Expenses vs Income Over Time',
+        xaxis=dict(title='Date'),
+        yaxis=dict(title='Amount'),
+        barmode='group'
+    )
+
+    figure = go.Figure(data=[trace], layout=layout)
+
+    # Convert Plotly figure to JSON to pass to template
+    plot_div = figure.to_html(full_html=False)
+
+    return render(request, 'tracker/visualize_data.html', {'plot_div': plot_div})

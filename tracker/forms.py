@@ -5,7 +5,7 @@ from .models import Entry
 class EntryForm(forms.ModelForm):
     class Meta:
         model = Entry
-        fields = ['date', 'description', 'amount', 'is_expense']
+        fields = ['description', 'amount', 'is_expense']
 
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
